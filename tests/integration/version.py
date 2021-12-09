@@ -38,6 +38,16 @@ class VersionTest(TestRunner):
         dogecointx = self.run_command([], ["dogecoin-tx", "-?"])
         self.ensure_version_on_first_line(dogecointx.stdout)
 
+        # make sure that we find version errors
+        caught_error = False
+        try:
+            self.ensure_version_on_first_line("no version here")
+        except AssertionError:
+            caught_error = True
+
+        if not caught_error:
+            raise AssertionError("Failed to catch a missing version")
+
     def ensure_version_on_first_line(self, cmd_output):
         """Assert that the version is contained in the first line of output string"""
         first_line = cmd_output.decode("utf-8").split("\n")[0]
