@@ -40,8 +40,6 @@ class IntegrationRunner(TestRunner):
         if self.found_failure:
             sys.exit(1)
 
-        sys.exit(0)
-
     def run_individual_test(self, test):
         """Run the actual test"""
         command = [
