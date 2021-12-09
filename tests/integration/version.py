@@ -41,7 +41,10 @@ class VersionTest(TestRunner):
     def ensure_version_on_first_line(self, cmd_output):
         """Assert that the version is contained in the first line of output string"""
         first_line = cmd_output.decode("utf-8").split("\n")[0]
-        assert re.match(self.version_expr, first_line) is not None
+
+        if re.match(self.version_expr, first_line) is None:
+            text = f"Could not find version { self.options.version } in { first_line }"
+            raise AssertionError(text)
 
 if __name__ == '__main__':
     VersionTest().main()
