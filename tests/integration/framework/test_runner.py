@@ -43,7 +43,7 @@ class TestRunner:
         parser.add_argument("--image", dest="image", required=True,
             help="The image or tag to execute tests against, eg: 'verywowimage'")
         parser.add_argument("--verbose", dest="verbose", default=False, action="store_true",
-            help="The image or tag to execute tests against, eg: 'verywowimage'")
+            help="Verbosely output actions taken and print docker logs, regardless of outcome")
 
         self.add_options(parser)
         self.options = parser.parse_args()
