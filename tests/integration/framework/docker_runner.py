@@ -5,6 +5,7 @@ Test framework for end-to-end docker tests
 """
 
 import subprocess
+import sys
 
 class DockerRunner:
     """Run docker containers for testing"""
@@ -45,11 +46,10 @@ class DockerRunner:
         try:
             output = subprocess.run(command, capture_output=True, check=True)
         except subprocess.CalledProcessError as docker_err:
-            print("STDERR:")
-            print(docker_err.stderr.decode("utf-8"))
-
-            print("STDOUT:")
-            print(docker_err.stdout.decode("utf-8"))
+            print(f"Error while running command: { ' '.join(command) }", file=sys.stderr)
+            print(docker_err, file=sys.stderr)
+            print(docker_err.stderr.decode("utf-8"), file=sys.stderr)
+            print(docker_err.stdout.decode("utf-8"), file=sys.stdout)
 
             raise docker_err
 

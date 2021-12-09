@@ -9,6 +9,17 @@ import sys
 
 from .integration.framework.test_runner import TestRunner
 
+def print_test_output(test_name, stdout, stderr=None):
+    """prints output from a test, including from stderr if provided"""
+    print("\n")
+    print(test_name)
+    print("----------------------")
+
+    if stderr is not None:
+        print(stderr.decode("utf-8"), file=sys.stderr)
+
+    print(stdout.decode("utf-8"))
+
 class IntegrationRunner(TestRunner):
     """Runs the integration tests"""
 
@@ -60,18 +71,11 @@ class IntegrationRunner(TestRunner):
             output = subprocess.run(command, capture_output=True, check=True)
         except subprocess.CalledProcessError as test_err:
             self.found_failure = True
-            print("\n")
-            print(test[0])
-            print("----------------------")
-            print(test_err.stderr.decode("utf-8"))
-            print(test_err.stdout.decode("utf-8"))
+            print_test_output(test[0], test_err.stdout, test_err.stderr)
             return False
 
         if self.options.verbose:
-            print("\n")
-            print(test[0])
-            print("----------------------")
-            print(output.stdout.decode("utf-8"))
+            print_test_output(test[0], output.stdout)
 
         return True
 
