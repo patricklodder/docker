@@ -41,7 +41,7 @@ class VersionTest(TestRunner):
         # make sure that we find version errors
         caught_error = False
         try:
-            self.ensure_version_on_first_line("no version here")
+            self.ensure_version_on_first_line("no version here".encode('utf-8'))
         except AssertionError:
             caught_error = True
 
