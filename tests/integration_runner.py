@@ -13,7 +13,7 @@ class IntegrationRunner(TestRunner):
     """Runs the integration tests"""
 
     def __init__(self):
-        """Constructor"""
+        """Initializes the failure tracker and test result map"""
         TestRunner.__init__(self)
         self.found_failure = False
         self.result_map = {}
