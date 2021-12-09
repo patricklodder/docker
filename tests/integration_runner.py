@@ -27,8 +27,9 @@ class IntegrationRunner(TestRunner):
     def run_test(self):
         """Run all specified tests and inherit any failures"""
 
+        #List of tests to run
         tests = [
-            [ "version", [ "--version", self.options.version ] ]
+            [ "version", [ "--version", self.options.version ] ],
         ]
 
         for test in tests:
