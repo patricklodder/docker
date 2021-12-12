@@ -3,7 +3,7 @@
 """
 
 import os
-import pytest
+import pytest # pylint: disable=import-error
 
 def abs_path(executable):
     """Build manually (expected) executable absolute path"""

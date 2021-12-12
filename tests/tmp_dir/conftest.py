@@ -7,7 +7,7 @@
 
 import os
 import tempfile
-import pytest
+import pytest # pylint: disable=import-error
 from entrypoint_hook import EntrypointHook, Command
 
 def pytest_configure():
