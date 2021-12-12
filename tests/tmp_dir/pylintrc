@@ -1,0 +1,3 @@
+[entrypoint-tests]
+disable = consider-using-with,
+    no-member
