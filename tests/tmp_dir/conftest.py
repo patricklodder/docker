@@ -1,5 +1,21 @@
 import pytest
+import os
+import tempfile
 from entrypoint_hook import EntrypointHook, Command
+
+def pytest_configure():
+    """Declare global variables to use across tests"""
+    #User used for tests
+    pytest.user = os.environ["USER"]
+
+    #Perform tests in a temporary directory, used as datadir
+    pytest.directory = tempfile.TemporaryDirectory()
+    pytest.datadir = pytest.directory.name
+
+    #PATH environment variable is changed during tests,
+    #keep a fixed value this way
+    pytest.PATH = os.environ["PATH"]
+    pytest.executables_folder = "/usr/local/bin"
 
 @pytest.fixture
 def hook():
