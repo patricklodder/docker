@@ -1,6 +1,13 @@
-import pytest
+"""
+    Pytest configuration file for tests fixtures and global variables.
+
+    Pytest fixtures are used to arrange and clean up tests environment.
+    See: https://docs.pytest.org/en/6.2.x/fixture.html
+"""
+
 import os
 import tempfile
+import pytest
 from entrypoint_hook import EntrypointHook, Command
 
 def pytest_configure():
@@ -25,12 +32,12 @@ def hook():
     """
     test_hook = EntrypointHook()
     yield test_hook
-    test_hook._reset_hooks()
+    test_hook.reset_hooks()
 
-def pytest_assertrepr_compare(op, left, right):
+def pytest_assertrepr_compare(left, right):
     """Override error messages of AssertionError on test failure."""
     #Display comparison of result command and an expected execve command.
-    if type(left) is Command and type(right) is Command:
+    if isinstance(left, Command) and isinstance(right, Command):
         assert_msg = ["fail"]
         assert_msg.append("======= Result =======")
         assert_msg.extend(str(left).splitlines())
@@ -39,3 +46,4 @@ def pytest_assertrepr_compare(op, left, right):
         assert_msg.append("======= Diff =======")
         assert_msg.extend(left.diff(right))
         return assert_msg
+    return None

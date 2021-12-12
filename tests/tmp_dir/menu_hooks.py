@@ -1,3 +1,8 @@
+"""
+    Store outputs of `-help menus from all Dogecoin Core executable.
+    Lists of options used to hook `entrypoint.get_help` function.
+"""
+
 dogecoin_cli = [
         '  -conf=<file>',
         '  -datadir=<dir>',

@@ -1,6 +1,9 @@
+"""
+    List of all tests for entrypoint.py, using pytest framework.
+"""
+
 import os
 import pytest
-from entrypoint_hook import CommandNotFound
 
 def abs_path(executable):
     """Build manually (expected) executable absolute path"""
@@ -60,7 +63,7 @@ def test_entrypoint_executables(hook):
     hook.test(test_args, test_environ, result_args, tx_result_env)
     assert hook.result == hook.reference
 
-def test_environ(hook):
+def test_environment_vars(hook):
     """
     Verify if environment is converted to arguments,
     control that arguments are removed from the environment.
@@ -314,8 +317,8 @@ def test_datadir(hook, host):
     Verify datadir metada, if it's owned by script user (dogecoin).
     """
     #Use a unique directory for this test
-    test_datadir = "/tmp/datadir_test"
-    datadir_argument = f"-datadir={test_datadir}"
+    tmp_datadir = "/tmp/datadir_test"
+    datadir_argument = f"-datadir={tmp_datadir}"
 
     test_args = ["dogecoind", datadir_argument]
     test_environ = {
@@ -338,7 +341,7 @@ def test_datadir(hook, host):
     assert hook.result == hook.reference
 
     #Test datadir metadata
-    datadir_folder = host.file(test_datadir)
-    assert datadir_folder.user == pytest.user 
-    assert datadir_folder.group == pytest.user 
+    datadir_folder = host.file(tmp_datadir)
+    assert datadir_folder.user == pytest.user
+    assert datadir_folder.group == pytest.user
     assert datadir_folder.mode == 0o755
