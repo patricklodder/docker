@@ -58,12 +58,11 @@ RUN set -ex && ARCHITECTURE=$(dpkg --print-architecture) \
 FROM debian:bullseye-slim AS final
 
 ENV USER=dogecoin
-ENV DATADIR=/${USER}/.dogecoin
+ENV DATADIR=/data
 
-# Root configuration to mimic user
-ENV HOME=/${USER}
-
-RUN useradd ${USER} --home-dir ${HOME}
+RUN mkdir ${DATADIR} \
+    && useradd ${USER} --home-dir ${DATADIR} \
+    && chown ${USER}:${USER} ${DATADIR}
 
 WORKDIR /tmp
 
@@ -77,15 +76,11 @@ RUN tar -xvf dogecoin.tar.gz --strip-components=1 \
     && chmod 755 bin/dogecoind bin/dogecoin-cli bin/dogecoin-tx \
     && rm -rf *
 
-WORKDIR ${HOME}
-
 # P2P network (mainnet, testnet & regnet respectively)
 EXPOSE 22556 44556 18444
 
 # RPC interface (mainnet, testnet & regnet respectively)
 EXPOSE 22555 44555 18332
-
-VOLUME ["/dogecoin/.dogecoin"]
 
 # Dependencies install
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -96,5 +91,9 @@ COPY entrypoint.py /usr/local/bin/entrypoint.py
 RUN chmod 755 /usr/local/bin/entrypoint.py
 
 USER ${USER}
+WORKDIR ${DATADIR}
+
+VOLUME ["${DATADIR}"]
+
 ENTRYPOINT ["entrypoint.py"]
 CMD ["dogecoind"]
