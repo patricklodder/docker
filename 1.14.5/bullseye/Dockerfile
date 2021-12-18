@@ -74,8 +74,7 @@ COPY --from=verify /verify/dogecoin.tar.gz ./
 # Setuid on binaries with $USER rights, to limit root usage.
 RUN tar -xvf dogecoin.tar.gz --strip-components=1 \
     && cp bin/dogecoind bin/dogecoin-cli bin/dogecoin-tx /usr/local/bin/ \
-    && chown ${USER}:${USER} /usr/local/bin/dogecoin* \
-    && chmod 4555 /usr/local/bin/dogecoin* \
+    && chmod 755 bin/dogecoind bin/dogecoin-cli bin/dogecoin-tx \
     && rm -rf *
 
 WORKDIR ${HOME}
@@ -94,7 +93,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.py /usr/local/bin/entrypoint.py
-RUN chmod 500 /usr/local/bin/entrypoint.py
+RUN chmod 755 /usr/local/bin/entrypoint.py
 
+USER ${USER}
 ENTRYPOINT ["entrypoint.py"]
 CMD ["dogecoind"]
